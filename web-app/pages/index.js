@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import GoogleVisionApi from './api/GoogleVisionAPI'
 
 export default function Home() {
   return (
@@ -15,6 +16,9 @@ export default function Home() {
         <input type="file" id="myfile" name="myfile"></input>
         <input type="submit"></input>
       </form>
+      <button onclick="">
+        Activate Lasers
+      </button>
       </main>
 
     </div>
