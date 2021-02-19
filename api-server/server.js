@@ -1,46 +1,27 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const path = require('path');
-// // var apiRouter = require("./routes/api");
-// // var mysqlCon = require("./mysql_connection");
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const cors = require('cors');
+var visionRouter = require("./routes/vision");
 
-// const cors = require('cors');
-const vision = require('@google-cloud/vision').v1;
-const client = new vision.ImageAnnotatorClient();
-const gcsSourceUri = 'gs://shuttle-one-bucket/GoogleVisionData/input/test.pdf';
-const gcsDestinationUri = 'gs://shuttle-one-bucket/GoogleVisionData/output/';
+//Load route files here
+//Default index file, can be removed
+const app = express();
 
-const inputConfig = {
-  // Supported mime_types are: 'application/pdf' and 'image/tiff'
-  mimeType: 'application/pdf',
-  gcsSource: {
-    uri: gcsSourceUri,
-  },
-};
-const outputConfig = {
-  gcsDestination: {
-    uri: gcsDestinationUri,
-  },
-};
-const features = [{type: 'DOCUMENT_TEXT_DETECTION'}];
-const request = {
-  requests: [
-    {
-      inputConfig: inputConfig,
-      features: features,
-      outputConfig: outputConfig,
-    },
-  ],
-};
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-async function test(){
-	const [operation] = await client.asyncBatchAnnotateFiles(request);
-	const [filesResponse] = await operation.promise();
-	const destinationUri =
-	  filesResponse.responses[0].outputConfig.gcsDestination.uri;
-	console.log('Json saved to: ' + destinationUri);
-}
+//const meta = mongoose.createConnection(mongoURIMeta, {useNewUrlParser: true})
+// const logs = mongoose.createConnection(mongoURILogs,{useNewUrlParser: true}).then(() => console.log('MongoDB Log Connected...'))
+// .catch(err => console.log);
+
+//Use routes here
+app.use('/vision', visionRouter);
+const port = process.env.PORT || 8080;
 
 
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
-test();

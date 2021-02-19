@@ -1,4 +1,4 @@
-let domain = "http://" + (process.env.REACT_APP_API_IP || 'localhost') + ":8080/api"
+let domain = "http://" + (process.env.REACT_APP_API_IP || 'localhost') + ":8080/vision"
 console.log('domain:', domain)
 
 export async function HttpRequest(method, route, body) {
@@ -22,20 +22,21 @@ export async function HttpRequest(method, route, body) {
     try {
         let response = await fetch(url, data);
         let contentType = response.headers.get('content-type')
+        console.log(response);
 
-        if(!response.ok) {
-            throw new Error(response.statusText);
-        }
+        // if(!response.ok) {
+        //     throw new Error(response.statusText);
+        // }
 
-        if (contentType.includes('application/json')) {
-            let jsonResponse = await response.json();
+        // if (contentType.includes('application/json')) {
+        //     let jsonResponse = await response.json();
 
-            if (jsonResponse.error) {                
-                throw jsonResponse.error;
-            }
+        //     if (jsonResponse.error) {                
+        //         throw jsonResponse.error;
+        //     }
 
-            return jsonResponse.data;
-        }
+        //     return jsonResponse.data;
+        // }
     }
     catch (error) {
         console.log(error);

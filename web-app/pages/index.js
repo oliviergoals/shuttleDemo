@@ -16,8 +16,8 @@ export default function Home() {
         <input type="file" id="myfile" name="myfile"></input>
         <input type="submit"></input>
       </form>
-      <button onclick="">
-        Activate Lasers
+      <button onClick={GoogleVisionApi.test}>
+        Test API
       </button>
       </main>
 
