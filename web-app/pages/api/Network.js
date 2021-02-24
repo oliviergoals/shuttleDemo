@@ -1,7 +1,7 @@
 let domain = "http://" + (process.env.REACT_APP_API_IP || 'localhost') + ":8080/vision"
 console.log('domain:', domain)
 
-export async function HttpRequest(method, route, body) {
+export async function HttpRequest(method, route, type='json' ,body) {
     let url = domain + route;
     //log in to server
     let data = {
@@ -10,13 +10,13 @@ export async function HttpRequest(method, route, body) {
         // mode: 'same-origin',
         headers: {
             'Access-Control-Allow-Origin': '*',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Accept': 'application/'+type,
+            'Content-Type': 'application/'+type
         }
     }
 
     if (body) {
-        data.body = JSON.stringify(body);
+        data.body = body;
     }
 
     try {

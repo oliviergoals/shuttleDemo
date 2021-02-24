@@ -52,9 +52,6 @@ app.post('/submit',upload.single('myFile'), async (req,res)=> {
 
 
 
-//const meta = mongoose.createConnection(mongoURIMeta, {useNewUrlParser: true})
-// const logs = mongoose.createConnection(mongoURILogs,{useNewUrlParser: true}).then(() => console.log('MongoDB Log Connected...'))
-// .catch(err => console.log);
 
 //Use routes here
 app.use('/vision', visionRouter);
