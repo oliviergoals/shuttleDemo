@@ -37,7 +37,7 @@ export default function Home() {
       //   };
       try{
         const data = new FormData() 
-        data.append('file', file)
+        data.append('myFile', file)
         console.log(data);
         let result =  await axios.post(url + "/submit", data, {})
         console.log(result);
