@@ -58,12 +58,14 @@ app.post('/submit', async (req,res)=> {
 
     console.log("CURRENTLY USING GOOGLE VISION");
     const gcsSourceURI = `gs://${bucketName}/${req.file.filename}`;
-    const gcsDestinationUri = `gs://${bucketName}/output/${req.file.filename.slice(0, -4)}`;
-    visionController.ocr(gcsSourceURI, gcsDestinationUri);
-    //insert vision portion
+    const gcsDestinationUri = `gs://${bucketName}/output/${req.file.filename.slice(0, -4)}/`;
+    await visionController.ocr(gcsSourceURI, gcsDestinationUri);
+
+    const [files] = await storage.bucket(bucketName).getFiles({ prefix: `output/${req.file.filename.slice(0, -4)}/`});
+    console.log(files[0].name)
     
     console.log("RETRIEVING JSON")
-    let result_file = myBucket.file('result.json')
+    let result_file = myBucket.file(files[0].name)
     // let final_result = JSON.stringify(result_file);
     let buf;
     result_file.createReadStream().on('data', function(d){

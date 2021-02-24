@@ -17,6 +17,7 @@ export default function Home() {
   async function onSubmit(e){
     e.preventDefault();
     console.log(file)
+    setFinalJson(`Extracting ${fileName.split("\\").slice(-1)[0]}...`)
       try{
         const data = new FormData() 
         data.append('myFile', file)
@@ -55,7 +56,7 @@ export default function Home() {
         <input type="submit"></input>
       </form>
 
-      <div style={{margin:"15px",padding:"10px",width:"70%",height:"100%", border:"2px solid",overflow:"clip"}}>
+      <div style={{margin:"15px",padding:"10px",width:"70%",height:"100%", border:"2px solid",overflow:"clip","white-space": "pre-line"}}>
         {finalJson}
       </div>
       
