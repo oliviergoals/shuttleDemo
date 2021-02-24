@@ -56,7 +56,7 @@ app.post('/submit', async (req,res)=> {
     let buf;
     result_file.createReadStream().on('data', function(d){
       buf += d
-    }).on('end', ()=> {resolve(buf);console.log(buf);res.send(buf)})
+    }).on('end', ()=> {resolve(buf);res.send(buf)})
     .on('error',e=> rejects(e))
 
   })

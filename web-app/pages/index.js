@@ -20,7 +20,6 @@ export default function Home() {
       try{
         const data = new FormData() 
         data.append('myFile', file)
-        console.log(data);
         let result =  await axios.post(url + "/submit", data, {})
         let pages = JSON.parse(JSON.parse(JSON.stringify(result)).data.substring(9)).responses
         let full_text = "";
