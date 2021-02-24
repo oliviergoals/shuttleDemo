@@ -10,6 +10,7 @@
   "dependencies": {
     "@google-cloud/vision": "^2.3.0",
     "axios": "^0.21.1",
+    "json-beautify": "^1.1.1",
     "next": "10.0.6",
     "node-fetch": "^2.6.1",
     "react": "17.0.1",

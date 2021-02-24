@@ -54,15 +54,13 @@ app.post('/submit', async (req,res)=> {
     let result_file = myBucket.file('result.json')
     // let final_result = JSON.stringify(result_file);
     let buf;
-    const final = result_file.createReadStream().on('data', function(d){
+    result_file.createReadStream().on('data', function(d){
       buf += d
-    }).on('end', ()=> resolve(buf))
+    }).on('end', ()=> {resolve(buf);console.log(buf);res.send(buf)})
     .on('error',e=> rejects(e))
-    let final_result = JSON.stringify(final)
-    console.log(final_result);
-    // console.log(final)
-    // return res.status(200).send(req.file)
+
   })
+
 });
 
 

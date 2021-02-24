@@ -1319,6 +1319,11 @@
   "resolved" "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
   "version" "4.0.0"
 
+"json-beautify@^1.1.1":
+  "integrity" "sha512-17j+Hk2lado0xqKtUcyAjK0AtoHnPSIgktWRsEXgdFQFG9UnaGw6CHa0J7xsvulxRpFl6CrkDFHght1p5ZJc4A=="
+  "resolved" "https://registry.npmjs.org/json-beautify/-/json-beautify-1.1.1.tgz"
+  "version" "1.1.1"
+
 "json-bigint@^1.0.0":
   "integrity" "sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ=="
   "resolved" "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz"
