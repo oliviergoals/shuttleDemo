@@ -2,22 +2,25 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
-var visionRouter = require("./routes/vision");
+const {Storage} = require('@google-cloud/storage');
+const visionController = require("./controllers/visionController");
+
 let multer = require("multer");
 let fs = require("fs");
 let storage_mult = multer.diskStorage({
   destination: function (req, file, cb) {
-  cb(null, 'public')
-},
-filename: function (req, file, cb) {
-  cb(null, file.originalname )
-}
+    cb(null, 'public')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname )
+  }
 })
+
 let upload = multer({ storage: storage_mult }).single("myFile");
 let dir = "./public"
 const app = express();
-const {Storage} = require('@google-cloud/storage');
-const serviceAccount = require('/Users/thebe/Desktop/shuttleDemo/json-key/shuttleOneVisionToken.json');
+// const serviceAccount = require('/Users/thebe/Desktop/shuttleDemo/json-key/shuttleOneVisionToken.json');
+const serviceAccount = require('/home/victorpham1997/Documents/ShuttleOneGoogleVision-fecc9a9c7a31.json');
 const { resolve } = require('path');
 const { rejects } = require('assert');
 // Creates a client
@@ -25,7 +28,8 @@ const { rejects } = require('assert');
 const storage = new Storage({
   projectId:serviceAccount.project_id,
   credentials: serviceAccount});
-const bucketName = 'testing_pdf123';
+// const bucketName = 'testing_pdf123';
+const bucketName = 'shuttle-one-bucket';
 const myBucket = storage.bucket(bucketName);
 
 app.use(cors());
@@ -35,19 +39,27 @@ app.set('json spaces', 2);
 
 app.post('/submit', async (req,res)=> {
   console.log("SERVER REACHED")
-  console.log("CURRENTLY SUBMITTING PDF FILE")
-  upload(req, res, function (err) {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
       return res.status(500).json(err)
     } else if (err) {
       return res.status(500).json(err)
     }
-    myBucket.upload("./" + req.file.path, function(err, file) {
-      console.log("pdf saved successfully in cloud");
+    await myBucket.upload("./" + req.file.path, function(err, file) {
+      console.log("CURRENTLY SUBMITTING PDF FILE");
     });
 
-    console.log("CURRENTLY USING GOOGLE VISION")
-    const uri = "gs://testing_pdf123/" + req.file.filename
+    let ifExist = false;
+    while(!ifExist){
+      ifExist = await storage.bucket(bucketName).file(req.file.filename).exists();
+    }
+
+    console.log("PDF SUCCESSFULLY UPLOADED");
+
+    console.log("CURRENTLY USING GOOGLE VISION");
+    const gcsSourceURI = `gs://${bucketName}/${req.file.filename}`;
+    const gcsDestinationUri = `gs://${bucketName}/output/${req.file.filename.slice(0, -4)}`;
+    visionController.ocr(gcsSourceURI, gcsDestinationUri);
     //insert vision portion
     
     console.log("RETRIEVING JSON")
@@ -63,15 +75,6 @@ app.post('/submit', async (req,res)=> {
 
 });
 
-
-//Load route files here
-//Default index file, can be removed
-
-
-
-
-//Use routes here
-app.use('/vision', visionRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

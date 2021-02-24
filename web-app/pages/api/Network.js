@@ -1,18 +1,18 @@
-let domain = "http://" + (process.env.REACT_APP_API_IP || 'localhost') + ":8080/vision"
+let domain = "http://" + (process.env.REACT_APP_API_IP || 'localhost') + ":8080"
 console.log('domain:', domain)
 
-export async function HttpRequest(method, route, type='json' ,body) {
+export async function HttpRequest(method, route ,body) {
     let url = domain + route;
     //log in to server
     let data = {
         method: method,
         // credentials: 'same-origin',
         // mode: 'same-origin',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Accept': 'application/'+type,
-            'Content-Type': 'application/'+type
-        }
+        // headers: {
+        //     'Access-Control-Allow-Origin': '*',
+        //     'Accept': 'application/'+type,
+        //     'Content-Type': 'application/'+type
+        // }
     }
 
     if (body) {
@@ -24,19 +24,6 @@ export async function HttpRequest(method, route, type='json' ,body) {
         let contentType = response.headers.get('content-type')
         console.log(response);
 
-        // if(!response.ok) {
-        //     throw new Error(response.statusText);
-        // }
-
-        // if (contentType.includes('application/json')) {
-        //     let jsonResponse = await response.json();
-
-        //     if (jsonResponse.error) {                
-        //         throw jsonResponse.error;
-        //     }
-
-        //     return jsonResponse.data;
-        // }
     }
     catch (error) {
         console.log(error);
