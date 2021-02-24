@@ -5,44 +5,30 @@ import GoogleVisionApi from './api/GoogleVisionAPI'
 import axios from 'axios';
 let url = "http://localhost:8080"
 const fetch = require("node-fetch");
+let beautify = require("json-beautify");
 
 
 export default function Home() {
   const [file, setFile] = useState();
   const [fileName,setFileName] = useState()
   const [uri,setUri] = useState()
+  const [finalJson, setFinalJson] = useState()
 
   async function onSubmit(e){
     e.preventDefault();
-    // const data = new FormData() 
-    // data.append('file', file)
     console.log(file)
-    // const formData = new FormData();
-    // formData.append()
-    // try{
-    //   let result = await fetch(url + "/submit", {
-    //     method: 'POST',
-    //     headers: {
-    //     'Content-Type': "application/json"
-    //     },
-    //     body:JSON.stringify({file:"file"})
-    //   })
-    //   let result_json = await result.json();
-    //   console.log('Success:', result_json);
-    //   return result_json;
-    // }
-    //   catch(error) {
-      //     console.error('Error:', error);
-      //     return error;
-      //   };
       try{
         const data = new FormData() 
         data.append('myFile', file)
         console.log(data);
         let result =  await axios.post(url + "/submit", data, {})
-        console.log(result);
-        console.log('Success:', result);
-        return result;
+        let pages = JSON.parse(JSON.parse(JSON.stringify(result)).data.substring(9)).responses
+        let full_text = "";
+        for (let i of pages){
+          let ft = i.fullTextAnnotation.text
+          full_text += ft
+        }
+        setFinalJson(full_text)
     }
     catch(e){
       console.log(e)
@@ -58,30 +44,22 @@ export default function Home() {
 
       <main className={styles.main}>
       <form  
-      onSubmit={onSubmit}
-      // action="https://localhost:8000/submit"
-      // method="post" 
-      encType="multipart/form-data">
+      onSubmit={onSubmit} encType="multipart/form-data">
         <label>Select a file:</label>
         <input type="file" id="myFile" name="myFile" 
         onChange={e => {setFileName(e.target.value);
           setFile(e.target.files[0]);
-          let splits = String(e.target.value).split('\\') ;
-          const str = "gs://testing_pdf123/" + splits[splits.length - 1];
-          setUri(str) 
         }}>
 
         </input>
         <input type="submit"></input>
       </form>
 
-      <div style={{padding:"10px"}}>
-        URI Value: {uri}
+      <div style={{margin:"15px",padding:"10px",width:"70%",height:"100%", border:"2px solid",overflow:"clip"}}>
+        {finalJson}
       </div>
       
-      <button onClick={GoogleVisionApi.test}>
-        Test API
-      </button>
+
       </main>
 
     </div>
